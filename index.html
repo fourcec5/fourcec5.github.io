@@ -60,7 +60,7 @@
             align-items: center;
             justify-content: center;
             font-size: 1.2rem;
-            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease, border-color 0.2s ease;
+            transition: transform 0.65s cubic-bezier(0.19, 1.9, 0.32, 1), background 0.2s ease, border-color 0.2s ease, filter 0.65s cubic-bezier(0.19, 1.9, 0.32, 1);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             outline: none;
@@ -117,7 +117,8 @@
             animation: glassSheenSpin 7s linear infinite;
             pointer-events: none;
             z-index: 1;
-            opacity: 0.75;
+            opacity: calc(0.7 + var(--stretch, 0) * 0.6);
+            transition: opacity 0.65s cubic-bezier(0.19, 1.9, 0.32, 1);
         }
 
         @keyframes glassSheenSpin {
@@ -531,7 +532,8 @@
         let dragStartY = 0;
         let dragMoved = false;
         let suppressClick = false;
-        const maxStretch = 22;
+        const maxStretch = 26;
+        const resistance = 0.2392;
 
         function handlePointerDown(e) {
             activePointerId = e.pointerId;
@@ -549,8 +551,8 @@
             const dist = Math.hypot(dx, dy);
             if (dist > 6) dragMoved = true;
             if (dist === 0) return;
-            const stretch = maxStretch * Math.tanh(dist / maxStretch);
-            const t = stretch / maxStretch;
+            const t = Math.tanh((dist * resistance) / maxStretch);
+            const stretch = maxStretch * t;
             const angle = Math.atan2(dy, dx);
             const deg = angle * (180 / Math.PI);
             const scaleAlong = 1 + t * 0.4;
@@ -558,12 +560,16 @@
             const tx = Math.cos(angle) * stretch;
             const ty = Math.sin(angle) * stretch;
             langBtn.style.transform = `translate(${tx}px, ${ty}px) rotate(${deg}deg) scale(${scaleAlong}, ${scaleAcross}) rotate(${-deg}deg)`;
+            langBtn.style.filter = `brightness(${1 + t * 0.22})`;
+            langBtn.style.setProperty('--stretch', t.toFixed(3));
         }
 
         function handlePointerEnd(e) {
             if (activePointerId === null) return;
             langBtn.classList.remove('stretching');
             langBtn.style.transform = '';
+            langBtn.style.filter = '';
+            langBtn.style.setProperty('--stretch', 0);
             if (dragMoved) suppressClick = true;
             activePointerId = null;
         }
