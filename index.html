@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FOURCEC5</title>
+    <title>Погрузчик FOURCEC5</title>
     <style>
         * {
             margin: 0;
@@ -13,13 +13,11 @@
             -webkit-touch-callout: none;
             tap-highlight-color: transparent;
         }
-
         html, body {
             width: 100%;
             height: 100%;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
-
         body {
             display: flex;
             align-items: center;
@@ -28,17 +26,16 @@
             padding: 1.5rem;
             min-height: 100vh;
         }
-
         .lang-toggle {
             position: fixed;
             top: 1.5rem;
             right: 1.5rem;
             z-index: 1000;
         }
-
         .lang-btn {
-            width: 44px;
-            height: 44px;
+            position: relative;
+            width: 48px;
+            height: 48px;
             border: 1px solid rgba(255, 255, 255, 0.4);
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.1);
@@ -48,7 +45,7 @@
             align-items: center;
             justify-content: center;
             font-size: 1.2rem;
-            transition: all 0.2s ease;
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease, border-color 0.2s ease;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             outline: none;
@@ -56,8 +53,13 @@
             appearance: none;
             user-select: none;
             -webkit-user-select: none;
+            overflow: hidden;
+            isolation: isolate;
         }
-
+        .lang-btn svg {
+            position: relative;
+            z-index: 3;
+        }
         .lang-btn:hover {
             background: rgba(255, 255, 255, 0.2);
             border-color: rgba(255, 255, 255, 0.6);
@@ -66,34 +68,63 @@
             outline: none;
         }
         .lang-btn:active {
-            background: rgba(255, 255, 255, 0.15);
+            transform: scale(0.92);
         }
-        @supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
-            @media not all and (-webkit-min-device-pixel-ratio: 2), not all and (min-resolution: 192dpi) {
-                .lang-dropdown {
-                    background: rgba(18, 18, 22, 0.55) !important;
-                    backdrop-filter: blur(48px) saturate(180%) brightness(1.15) !important;
-                    -webkit-backdrop-filter: blur(48px) saturate(180%) brightness(1.15) !important;
-                    border: 1px solid rgba(255, 255, 255, 0.18) !important;
-                    box-shadow:
-                        0 8px 32px rgba(0, 0, 0, 0.45),
-                        0 1.5px 0 rgba(255,255,255,0.13) inset,
-                        0 -1px 0 rgba(0,0,0,0.18) inset !important;
-                }
-            }
+        .android-glass .lang-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(3px) url(#liquid-distortion) saturate(160%) brightness(1.08);
+            -webkit-backdrop-filter: blur(3px) saturate(160%) brightness(1.08);
+            box-shadow:
+                inset 0 1px 1px rgba(255, 255, 255, 0.55),
+                inset 0 -6px 10px -6px rgba(0, 0, 0, 0.45),
+                inset 6px 0 10px -8px rgba(255, 255, 255, 0.3),
+                0 10px 30px rgba(0, 0, 0, 0.55),
+                0 2px 6px rgba(0, 0, 0, 0.4);
+        }
+        .android-glass .lang-btn::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 45%);
+            mix-blend-mode: overlay;
+            pointer-events: none;
+            z-index: 2;
+        }
+        .android-glass .lang-btn::after {
+            content: "";
+            position: absolute;
+            inset: -40%;
+            background: conic-gradient(from 0deg, transparent 0%, rgba(255, 255, 255, 0.35) 8%, transparent 16%, transparent 50%, rgba(255, 255, 255, 0.18) 58%, transparent 66%);
+            animation: glassSheenSpin 7s linear infinite;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.7;
+        }
+        .android-glass .lang-btn:active {
+            background: rgba(255, 255, 255, 0.14);
+            box-shadow:
+                inset 0 1px 2px rgba(255, 255, 255, 0.65),
+                inset 0 -3px 6px -4px rgba(0, 0, 0, 0.5),
+                0 4px 14px rgba(0, 0, 0, 0.5);
+        }
+        @keyframes glassSheenSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
         .lang-dropdown {
             position: absolute;
             top: 100%;
             right: 0;
-            margin-top: 0.75rem;
+            margin-top: 0.9rem;
             background: rgba(26, 26, 26, 0.8);
             backdrop-filter: blur(40px);
             -webkit-backdrop-filter: blur(40px);
             border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 20px;
+            border-radius: 22px;
             overflow: hidden;
-            min-width: 150px;
+            min-width: 160px;
             display: none;
             flex-direction: column;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
@@ -102,22 +133,54 @@
         @keyframes slideDown {
             from {
                 opacity: 0;
-                transform: translateY(-12px);
+                transform: translateY(-12px) scale(0.96);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
         }
         .lang-dropdown.active {
             display: flex;
         }
+        .android-glass .lang-dropdown {
+            background: rgba(20, 20, 24, 0.42);
+            backdrop-filter: blur(3px) url(#liquid-distortion) saturate(180%) brightness(1.12);
+            -webkit-backdrop-filter: blur(26px) saturate(180%) brightness(1.12);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            box-shadow:
+                inset 0 1.5px 1px rgba(255, 255, 255, 0.5),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.25),
+                inset 10px 0 20px -14px rgba(255, 255, 255, 0.25),
+                inset -10px 0 20px -14px rgba(255, 255, 255, 0.1),
+                0 24px 60px rgba(0, 0, 0, 0.6),
+                0 4px 16px rgba(0, 0, 0, 0.4);
+            isolation: isolate;
+        }
+        .android-glass .lang-dropdown::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0) 70%, rgba(255, 255, 255, 0.12) 100%);
+            mix-blend-mode: overlay;
+            pointer-events: none;
+            z-index: 0;
+            background-size: 220% 220%;
+            animation: glassShimmer 5s ease-in-out infinite;
+        }
+        @keyframes glassShimmer {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
         .lang-option {
-            padding: 1rem 1.25rem;
+            position: relative;
+            z-index: 1;
+            padding: 1.05rem 1.3rem;
             color: #fff;
             cursor: pointer;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.2s ease;
+            transition: background 0.2s ease;
             font-size: 0.95rem;
             text-align: center;
             font-weight: 500;
@@ -129,11 +192,16 @@
             border-bottom: none;
         }
         .lang-option:hover {
-            background: rgba(255, 255, 255, 0.08);
-            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .android-glass .lang-option {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        .android-glass .lang-option:hover {
+            background: rgba(255, 255, 255, 0.14);
         }
         .lang-option:active {
-            background: rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.16);
         }
         .container {
             width: 100%;
@@ -238,8 +306,8 @@
                 right: 1rem;
             }
             .lang-btn {
-                width: 40px;
-                height: 40px;
+                width: 44px;
+                height: 44px;
                 font-size: 1rem;
             }
         }
@@ -251,6 +319,13 @@
     </style>
 </head>
 <body>
+    <svg width="0" height="0" style="position:absolute;overflow:hidden">
+        <filter id="liquid-distortion" x="-30%" y="-30%" width="160%" height="160%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.009 0.012" numOctaves="2" seed="9" result="noise"></feTurbulence>
+            <feGaussianBlur in="noise" stdDeviation="3" result="blurredNoise"></feGaussianBlur>
+            <feDisplacementMap in="SourceGraphic" in2="blurredNoise" scale="26" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+        </filter>
+    </svg>
     <div class="lang-toggle">
         <button class="lang-btn" id="langBtn">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -310,12 +385,7 @@
         const langOptions = document.querySelectorAll('.lang-option');
         const isAndroid = /android/i.test(navigator.userAgent);
         if (isAndroid) {
-            langDropdown.style.background = 'rgba(18, 18, 22, 0.55)';
-            langDropdown.style.backdropFilter = 'blur(48px) saturate(180%) brightness(1.15)';
-            langDropdown.style.webkitBackdropFilter = 'blur(48px) saturate(180%) brightness(1.15)';
-            langDropdown.style.border = '1px solid rgba(255, 255, 255, 0.18)';
-            langDropdown.style.boxShadow = '0 8px 32px rgba(0,0,0,0.45), 0 1.5px 0 rgba(255,255,255,0.13) inset, 0 -1px 0 rgba(0,0,0,0.18) inset';
-            langDropdown.style.borderRadius = '22px';
+            document.body.classList.add('android-glass');
         }
         function updateLanguage(lang) {
             currentLang = lang;
