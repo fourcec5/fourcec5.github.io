@@ -3,7 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Погрузчик FOURCEC5</title>
+    <title>Лучший погрузчик</title>
+    <meta name="description" content="Это лучший сайт для погрузчиков, созданный FOURCEC5.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Лучший погрузчик">
+    <meta property="og:description" content="Это лучший сайт для погрузчиков, созданный FOURCEC5.">
+    <meta property="og:image" content="https://raw.githubusercontent.com/fourcec5/izobrazheniye/refs/heads/main/file_00000000374c81fdbe4e4b102543c815.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Лучший погрузчик">
+    <meta name="twitter:description" content="Это лучший сайт для погрузчиков, созданный FOURCEC5.">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/fourcec5/izobrazheniye/refs/heads/main/file_00000000374c81fdbe4e4b102543c815.png">
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/fourcec5/izobrazheniye/refs/heads/main/file_00000000e1dc81f7bb1df419eb3e2d7a.png">
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/fourcec5/izobrazheniye/refs/heads/main/file_00000000e1dc81f7bb1df419eb3e2d7a.png">
     <style>
         * {
             margin: 0;
@@ -13,11 +24,13 @@
             -webkit-touch-callout: none;
             tap-highlight-color: transparent;
         }
+
         html, body {
             width: 100%;
             height: 100%;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
+
         body {
             display: flex;
             align-items: center;
@@ -26,12 +39,14 @@
             padding: 1.5rem;
             min-height: 100vh;
         }
+
         .lang-toggle {
             position: fixed;
             top: 1.5rem;
             right: 1.5rem;
             z-index: 1000;
         }
+
         .lang-btn {
             position: relative;
             width: 48px;
@@ -45,7 +60,7 @@
             align-items: center;
             justify-content: center;
             font-size: 1.2rem;
-            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease, border-color 0.2s ease;
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease, border-color 0.2s ease;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             outline: none;
@@ -55,21 +70,61 @@
             -webkit-user-select: none;
             overflow: hidden;
             isolation: isolate;
+            touch-action: none;
+            will-change: transform;
         }
+
+        .lang-btn.stretching {
+            transition: background 0.2s ease, border-color 0.2s ease;
+        }
+
         .lang-btn svg {
             position: relative;
             z-index: 3;
+            pointer-events: none;
         }
+
         .lang-btn:hover {
             background: rgba(255, 255, 255, 0.2);
             border-color: rgba(255, 255, 255, 0.6);
         }
+
         .lang-btn:focus {
             outline: none;
         }
-        .lang-btn:active {
-            transform: scale(0.92);
+
+        .liquid-glass .lang-btn,
+        .liquid-glass .lang-dropdown {
+            isolation: isolate;
         }
+
+        .liquid-glass .lang-btn::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle at 28% 20%, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0) 48%);
+            mix-blend-mode: overlay;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .liquid-glass .lang-btn::after {
+            content: "";
+            position: absolute;
+            inset: -40%;
+            background: conic-gradient(from 0deg, transparent 0%, rgba(255, 255, 255, 0.4) 8%, transparent 16%, transparent 50%, rgba(255, 255, 255, 0.2) 58%, transparent 66%);
+            animation: glassSheenSpin 7s linear infinite;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.75;
+        }
+
+        @keyframes glassSheenSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
         .android-glass .lang-btn {
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.35);
@@ -82,26 +137,21 @@
                 0 10px 30px rgba(0, 0, 0, 0.55),
                 0 2px 6px rgba(0, 0, 0, 0.4);
         }
-        .android-glass .lang-btn::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            border-radius: 50%;
-            background: radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 45%);
-            mix-blend-mode: overlay;
-            pointer-events: none;
-            z-index: 2;
+
+        .ios-glass .lang-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(28px) saturate(220%) brightness(1.25) contrast(1.05);
+            -webkit-backdrop-filter: blur(28px) saturate(220%) brightness(1.25) contrast(1.05);
+            box-shadow:
+                inset 0 1.5px 1.5px rgba(255, 255, 255, 0.85),
+                inset 0 -8px 12px -6px rgba(0, 0, 0, 0.4),
+                inset 8px 0 14px -10px rgba(255, 255, 255, 0.5),
+                inset -8px 0 14px -10px rgba(0, 0, 0, 0.15),
+                0 14px 34px rgba(0, 0, 0, 0.5),
+                0 2px 8px rgba(0, 0, 0, 0.35);
         }
-        .android-glass .lang-btn::after {
-            content: "";
-            position: absolute;
-            inset: -40%;
-            background: conic-gradient(from 0deg, transparent 0%, rgba(255, 255, 255, 0.35) 8%, transparent 16%, transparent 50%, rgba(255, 255, 255, 0.18) 58%, transparent 66%);
-            animation: glassSheenSpin 7s linear infinite;
-            pointer-events: none;
-            z-index: 1;
-            opacity: 0.7;
-        }
+
         .android-glass .lang-btn:active {
             background: rgba(255, 255, 255, 0.14);
             box-shadow:
@@ -109,10 +159,15 @@
                 inset 0 -3px 6px -4px rgba(0, 0, 0, 0.5),
                 0 4px 14px rgba(0, 0, 0, 0.5);
         }
-        @keyframes glassSheenSpin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+
+        .ios-glass .lang-btn:active {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow:
+                inset 0 1px 2px rgba(255, 255, 255, 0.9),
+                inset 0 -4px 8px -5px rgba(0, 0, 0, 0.45),
+                0 6px 18px rgba(0, 0, 0, 0.45);
         }
+
         .lang-dropdown {
             position: absolute;
             top: 100%;
@@ -130,6 +185,7 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             animation: slideDown 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
+
         @keyframes slideDown {
             from {
                 opacity: 0;
@@ -140,9 +196,29 @@
                 transform: translateY(0) scale(1);
             }
         }
+
         .lang-dropdown.active {
             display: flex;
         }
+
+        .liquid-glass .lang-dropdown::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0) 70%, rgba(255, 255, 255, 0.14) 100%);
+            mix-blend-mode: overlay;
+            pointer-events: none;
+            z-index: 0;
+            background-size: 220% 220%;
+            animation: glassShimmer 5s ease-in-out infinite;
+        }
+
+        @keyframes glassShimmer {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+
         .android-glass .lang-dropdown {
             background: rgba(20, 20, 24, 0.42);
             backdrop-filter: blur(3px) url(#liquid-distortion) saturate(180%) brightness(1.12);
@@ -155,24 +231,23 @@
                 inset -10px 0 20px -14px rgba(255, 255, 255, 0.1),
                 0 24px 60px rgba(0, 0, 0, 0.6),
                 0 4px 16px rgba(0, 0, 0, 0.4);
-            isolation: isolate;
         }
-        .android-glass .lang-dropdown::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(120deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0) 70%, rgba(255, 255, 255, 0.12) 100%);
-            mix-blend-mode: overlay;
-            pointer-events: none;
-            z-index: 0;
-            background-size: 220% 220%;
-            animation: glassShimmer 5s ease-in-out infinite;
+
+        .ios-glass .lang-dropdown {
+            background: rgba(28, 28, 32, 0.38);
+            backdrop-filter: blur(34px) saturate(220%) brightness(1.2) contrast(1.05);
+            -webkit-backdrop-filter: blur(34px) saturate(220%) brightness(1.2) contrast(1.05);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 26px;
+            box-shadow:
+                inset 0 2px 1.5px rgba(255, 255, 255, 0.7),
+                inset 0 -1.5px 0 rgba(0, 0, 0, 0.2),
+                inset 14px 0 26px -16px rgba(255, 255, 255, 0.4),
+                inset -14px 0 26px -16px rgba(255, 255, 255, 0.15),
+                0 30px 70px rgba(0, 0, 0, 0.55),
+                0 6px 18px rgba(0, 0, 0, 0.4);
         }
-        @keyframes glassShimmer {
-            0% { background-position: 0% 0%; }
-            50% { background-position: 100% 100%; }
-            100% { background-position: 0% 0%; }
-        }
+
         .lang-option {
             position: relative;
             z-index: 1;
@@ -188,21 +263,31 @@
             -webkit-user-select: none;
             outline: none;
         }
+
         .lang-option:last-child {
             border-bottom: none;
         }
+
         .lang-option:hover {
             background: rgba(255, 255, 255, 0.1);
         }
-        .android-glass .lang-option {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+
+        .liquid-glass .lang-option {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.14);
         }
-        .android-glass .lang-option:hover {
-            background: rgba(255, 255, 255, 0.14);
-        }
-        .lang-option:active {
+
+        .liquid-glass .lang-option:hover {
             background: rgba(255, 255, 255, 0.16);
         }
+
+        .ios-glass .lang-option:hover {
+            background: rgba(255, 255, 255, 0.22);
+        }
+
+        .lang-option:active {
+            background: rgba(255, 255, 255, 0.18);
+        }
+
         .container {
             width: 100%;
             max-width: 600px;
@@ -212,9 +297,11 @@
             padding: 3rem 2rem;
             text-align: center;
         }
+
         .header {
             margin-bottom: 2rem;
         }
+
         .logo {
             font-size: clamp(1.8rem, 6vw, 2.2rem);
             font-weight: 700;
@@ -222,6 +309,7 @@
             letter-spacing: 0.05em;
             margin-bottom: 1rem;
         }
+
         h1 {
             font-size: clamp(1.3rem, 4vw, 1.8rem);
             color: #fff;
@@ -231,6 +319,7 @@
             overflow-wrap: break-word;
             font-weight: 500;
         }
+
         .description {
             font-size: clamp(0.9rem, 2vw, 1rem);
             color: #ccc;
@@ -238,15 +327,18 @@
             margin-bottom: 2rem;
             word-wrap: break-word;
         }
+
         .description strong {
             color: #fff;
         }
+
         .button-group {
             display: flex;
             flex-direction: column;
             gap: 1rem;
             margin-top: 2rem;
         }
+
         a {
             display: inline-block;
             padding: 0.85rem 1.75rem;
@@ -265,17 +357,21 @@
             user-select: none;
             -webkit-user-select: none;
         }
+
         a:hover {
             background: #fff;
             color: #000;
         }
+
         a:active {
             background: rgba(255, 255, 255, 0.85);
             color: #000;
         }
+
         a:focus {
             outline: none;
         }
+
         .button-label {
             font-size: 0.8rem;
             color: #999;
@@ -284,33 +380,41 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
+
         @media (max-width: 480px) {
             .container {
                 padding: 2rem 1.5rem;
             }
+
             .logo {
                 font-size: 1.6rem;
             }
+
             h1 {
                 font-size: 1.2rem;
             }
+
             .description {
                 font-size: 0.9rem;
             }
+
             a {
                 padding: 0.7rem 1.4rem;
                 font-size: 0.9rem;
             }
+
             .lang-toggle {
                 top: 1rem;
                 right: 1rem;
             }
+
             .lang-btn {
                 width: 44px;
                 height: 44px;
                 font-size: 1rem;
             }
         }
+
         @media (min-width: 1200px) {
             .container {
                 padding: 4rem 3rem;
@@ -326,6 +430,7 @@
             <feDisplacementMap in="SourceGraphic" in2="blurredNoise" scale="26" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
         </filter>
     </svg>
+
     <div class="lang-toggle">
         <button class="lang-btn" id="langBtn">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -338,15 +443,19 @@
             <div class="lang-option" data-lang="en">English</div>
         </div>
     </div>
+
     <div class="container">
         <div class="header">
             <div class="logo">FOURCEC5</div>
         </div>
+
         <h1 id="title">Добро пожаловать на мои проекты</h1>
+
         <div class="description">
             <p id="desc">Владелец сайта: <strong>FOURCEC5</strong></p>
             <p id="subdesc" style="margin-top: 1rem;">Небольшой проект, разработанный мной. У меня есть два веб-сайта: <strong>SCRIPT//SKID</strong> обучает вас скидывать скрипты, а <strong>AASIM</strong> защищает ваши Luau скрипты безопасно.</p>
         </div>
+
         <div class="button-group">
             <div>
                 <span class="button-label" id="label1">Script//Skid</span>
@@ -358,6 +467,7 @@
             </div>
         </div>
     </div>
+
     <script>
         const translations = {
             ru: {
@@ -379,14 +489,23 @@
                 btn2: "Visit Website"
             }
         };
+
         let currentLang = 'ru';
+
         const langBtn = document.getElementById('langBtn');
         const langDropdown = document.getElementById('langDropdown');
         const langOptions = document.querySelectorAll('.lang-option');
-        const isAndroid = /android/i.test(navigator.userAgent);
+
+        const ua = navigator.userAgent;
+        const isAndroid = /android/i.test(ua);
+        const isIOS = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
         if (isAndroid) {
-            document.body.classList.add('android-glass');
+            document.body.classList.add('liquid-glass', 'android-glass');
+        } else if (isIOS) {
+            document.body.classList.add('liquid-glass', 'ios-glass');
         }
+
         function updateLanguage(lang) {
             currentLang = lang;
             document.documentElement.lang = lang;
@@ -396,28 +515,85 @@
             document.getElementById('btn1').textContent = translations[lang].btn1;
             document.getElementById('label2').textContent = translations[lang].label2;
             document.getElementById('btn2').textContent = translations[lang].btn2;
+
             if (lang === 'ru') {
                 document.getElementById('desc').innerHTML = 'Владелец сайта: <strong>FOURCEC5</strong>';
             } else {
                 document.getElementById('desc').innerHTML = 'Site Owner: <strong>FOURCEC5</strong>';
             }
+
             langDropdown.classList.remove('active');
             localStorage.setItem('language', lang);
         }
+
+        let activePointerId = null;
+        let dragStartX = 0;
+        let dragStartY = 0;
+        let dragMoved = false;
+        let suppressClick = false;
+        const maxStretch = 22;
+
+        function handlePointerDown(e) {
+            activePointerId = e.pointerId;
+            dragStartX = e.clientX;
+            dragStartY = e.clientY;
+            dragMoved = false;
+            langBtn.classList.add('stretching');
+            langBtn.setPointerCapture(activePointerId);
+        }
+
+        function handlePointerMove(e) {
+            if (activePointerId === null || e.pointerId !== activePointerId) return;
+            const dx = e.clientX - dragStartX;
+            const dy = e.clientY - dragStartY;
+            const dist = Math.hypot(dx, dy);
+            if (dist > 6) dragMoved = true;
+            if (dist === 0) return;
+            const stretch = maxStretch * Math.tanh(dist / maxStretch);
+            const t = stretch / maxStretch;
+            const angle = Math.atan2(dy, dx);
+            const deg = angle * (180 / Math.PI);
+            const scaleAlong = 1 + t * 0.4;
+            const scaleAcross = 1 - t * 0.18;
+            const tx = Math.cos(angle) * stretch;
+            const ty = Math.sin(angle) * stretch;
+            langBtn.style.transform = `translate(${tx}px, ${ty}px) rotate(${deg}deg) scale(${scaleAlong}, ${scaleAcross}) rotate(${-deg}deg)`;
+        }
+
+        function handlePointerEnd(e) {
+            if (activePointerId === null) return;
+            langBtn.classList.remove('stretching');
+            langBtn.style.transform = '';
+            if (dragMoved) suppressClick = true;
+            activePointerId = null;
+        }
+
+        langBtn.addEventListener('pointerdown', handlePointerDown);
+        langBtn.addEventListener('pointermove', handlePointerMove);
+        langBtn.addEventListener('pointerup', handlePointerEnd);
+        langBtn.addEventListener('pointercancel', handlePointerEnd);
+
         langBtn.addEventListener('click', () => {
+            if (suppressClick) {
+                suppressClick = false;
+                return;
+            }
             langDropdown.classList.toggle('active');
         });
+
         langOptions.forEach(option => {
             option.addEventListener('click', () => {
                 const lang = option.getAttribute('data-lang');
                 updateLanguage(lang);
             });
         });
+
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.lang-toggle')) {
                 langDropdown.classList.remove('active');
             }
         });
+
         const savedLang = localStorage.getItem('language') || 'ru';
         updateLanguage(savedLang);
     </script>
